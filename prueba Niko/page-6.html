@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aves Chilenas</title>
+    <link href="style.css" rel="stylesheet"/>
+</head>
+<body>
+    <nav>
+        <h1>Aves Chilenas</h1>
+        <ul>
+            <li><a href="index.html">Portada</a></li>
+            <li><a href="page-1.html">Aves cantoras</a></li>
+            <li><a href="page-2.html">Aves costeras</a></li>
+            <li><a href="page-3.html">Aves acuáticas</a></li>
+            <li><a href="page-4.html">Aves de presa</a></li>
+            <li><a href="page-5.html">Pelícanos</a></li>
+            <li><a href="page-6.html" class="active">Colibríes y vencejos</a></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <h2>Colibríes y vencejos</h2>
+        <p>El orden Apodiformes agrupa a dos grupos de aves algo iguales: los vencejos y los colibríes o picaflor. En realidad esa igualdad es vista solo por algunos ornitólogos, ya que muchos separan este grupo dejando a los colibríes dentro de un grupo u orden propio llamado Trochiliformes.
+
+En Chile viven alrededor de 12 especies, entre vencejos (2 sp.) y colibríes (10 sp.), muchos de los cuales son errantes en el país. La mayoría de las especies viven en norte de Chile, incluso los errantes, la mayoría (no todos), son vistos en esa zona.</p>
+        <div class="grid" id="grid"></div>
+    </div>
+    <footer>
+        <p>Desarrollado por <a href="#" target="_blank">Niko Garrido</a> &copy; 2025</p>
+    </footer>
+    <script>
+        const grid = document.getElementById('grid');
+
+        async function datos(raw) {
+            try {
+                let consulta = await fetch(raw);
+                let data = await consulta.json();
+                console.log(data);
+                let conteo = 1;
+                data.forEach((a) => {
+                    //if(){
+                    if(a.info.order.value == "Apodiformes"){
+                    grid.innerHTML += `
+                        <div class="grid-item">
+                            <img src="${a.image.url.replace("http://www.buscaves.cl/", "https://buscaves.cl/")}" alt="${a.names.spanish}"/>
+                            <p>${conteo}. <em>${a.names.spanish}</em></p>
+                            <small>${a.names.latin}</small>
+                        </div>
+                    `;
+                    conteo++;
+                    }
+                    //};
+                });
+            } catch (error) {
+                console.error('Error al cargar los datos:', error);
+            }
+        }
+
+        datos("https://raw.githubusercontent.com/NinjasCL/chileanbirds-dataset/refs/heads/master/data/birds.json");
+    </script>
+</body>
+</html>
